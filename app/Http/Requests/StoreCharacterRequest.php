@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CharacterGender;
 use App\Traits\HttpResponses;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rules\Enum;
 
-class StorePlayerRequest extends FormRequest
+class StoreCharacterRequest extends FormRequest
 {
     use HttpResponses;
     /**
@@ -28,9 +30,18 @@ class StorePlayerRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|unique:players,username',
-            'email' => 'required|email|unique:players,email',
-            'password' => 'required|min:8|confirmed'
+            'parent_id' => 'required|numeric',
+            'username' => 'required|unique:characters,username',
+            'password' => 'required|min:8|confirmed',
+            'name' => 'required',
+            'gender' => [new Enum(CharacterGender::class)],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'gender.Illuminate\Validation\Rules\Enum' => "Please input either 'male' or 'female'"
         ];
     }
 

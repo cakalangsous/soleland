@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePlayerRequest;
-use App\Models\Player;
+use App\Http\Requests\StoreParentRequest;
+use App\Models\Parents;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     use HttpResponses;
 
-    public function register(StorePlayerRequest $req)
+    public function register(StoreParentRequest $req)
     {
         $inputs = $req->validated();
         
@@ -22,9 +22,9 @@ class AuthController extends Controller
         $inputs['password'] = Hash::make($inputs['salt'].$inputs['password'].$inputs['salt']);
         $inputs['email_verify_token'] = Str::random(25);
         
-        $player = Player::create($inputs);
+        $parent = Parents::create($inputs);
 
-        return $this->success($player, 'Registration success. Please verify your email.', 201);
+        return $this->success($parent, 'Parent registration success.', 201);
     }
 
     public function login(Request $req)
@@ -34,23 +34,23 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $player = Player::whereEmail($req->email)->first();
+        $parent = Parents::whereEmail($req->email)->first();
 
-        if (!$player) {
+        if (!$parent) {
             return $this->error($req->all(), 'Wrong email or password.', 401);
         }
 
-        if (!Hash::check($player->salt.$req->password.$player->salt, $player->password)) {
+        if (!Hash::check($parent->salt.$req->password.$parent->salt, $parent->password)) {
             return $this->error($req->all(), 'Wrong email or password.', 401);
         }
 
-        // if ($player->email_verified_at == null) {
+        // if ($parent->email_verified_at == null) {
         //     return $this->error($req->all(), 'Please verify your email first.', 403);
         // }
 
         $data = [
-            'player' => $player,
-            'token' => $player->createToken('Api token of '. $player->username)->plainTextToken
+            'parent' => $parent,
+            'token' => $parent->createToken('Api token of '. $parent->username, ['role:parent'])->plainTextToken
         ];
 
         return $this->success($data, 'success');

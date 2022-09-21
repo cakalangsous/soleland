@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Player extends Model
+class Parents extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
