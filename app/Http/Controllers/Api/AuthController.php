@@ -37,11 +37,11 @@ class AuthController extends Controller
         $parent = Parents::whereEmail($req->email)->first();
 
         if (!$parent) {
-            return $this->error($req->all(), 'Wrong email or password.', 401);
+            return $this->error($req->all(), 'Wrong email or password.', 203);
         }
 
         if (!Hash::check($parent->salt.$req->password.$parent->salt, $parent->password)) {
-            return $this->error($req->all(), 'Wrong email or password.', 401);
+            return $this->error($req->all(), 'Wrong email or password.', 203);
         }
 
         // if ($parent->email_verified_at == null) {

@@ -36,11 +36,11 @@ class CharacterController extends Controller
         $character = Character::where('username', $req->username)->first();
 
         if (!$character) {
-            return $this->error($req->all(), 'Wrong username or password.', 401);
+            return $this->error($req->all(), 'Wrong username or password.', 203);
         }
 
         if (!Hash::check($character->salt.$req->password.$character->salt, $character->password)) {
-            return $this->error($req->all(), 'Wrong username or password.', 401);
+            return $this->error($req->all(), 'Wrong username or password.', 203);
         }
         
         $data = [
