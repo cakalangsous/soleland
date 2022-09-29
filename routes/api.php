@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CharacterController;
+use App\Http\Controllers\Api\KidAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,11 +26,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-Route::prefix('character')->group(function() {
-    Route::post('/register', [CharacterController::class, 'register'])->middleware(['auth:sanctum', 'auth:parent', 'type.parent']);
-    Route::post('/login', [CharacterController::class, 'login']);
+Route::prefix('kid')->group(function() {
+    Route::post('/register', [KidAuthController::class, 'register'])->middleware(['auth:sanctum', 'auth:parent', 'type.parent']);
+    Route::post('/login', [KidAuthController::class, 'login']);
 
     Route::middleware(['auth:sanctum', 'auth:character', 'type.character'])->group(function() {
-        Route::get('profile', [CharacterController::class, 'profile']);
+        Route::get('profile', [KidAuthController::class, 'profile']);
+        
+        Route::put('/', [CharacterController::class, 'update']);
     });
 });
