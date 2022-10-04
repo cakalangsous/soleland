@@ -33,6 +33,6 @@ Route::prefix('kid')->group(function() {
     Route::middleware(['auth:sanctum', 'auth:character', 'type.character'])->group(function() {
         Route::get('profile', [KidAuthController::class, 'profile']);
         
-        Route::post('/', [CharacterController::class, 'update']);
+        Route::post('/update', [CharacterController::class, 'update']);
     });
 });
